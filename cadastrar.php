@@ -1,39 +1,40 @@
 <?php
-    header('Content-Type: application/json');
+header('Content-Type: application/json');
+include 'conexao.php';
 
-    include 'conexao.php';
+$email = $_POST['email'] ?? '';
+$senha = $_POST['senha'] ?? '';
 
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+$resposta = array();
 
-    $cadastrar = "INSERT INTO Usuario(email, senha) VALUES('$email','$senha')";
-    $verificar = "SELECT * FROM Usuario WHERE email = '$email'";
-    $resposta = array();
+if (isset($ocon) && $ocon) {
+    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        
+        $verificar = "SELECT * FROM Usuario WHERE email = '$email'";
+        $query_verificar = mysqli_query($ocon, $verificar);
 
-
-    if(isset($ocon) && $ocon){
-        if(filter_var($email, FILTER_VALIDATE_EMAIL)){
-            if(mysqli_num_rows(mysqli_query($ocon, $verificar)) == 0){
-                if(mysqli_query($ocon, $cadastrar)){
-                    $resposta["status"] = "sucesso";
-                    $resposta["mensagem"] = "Cadastro bem sucedido";
-                    echo json_encode($resposta);
-                }
-            }
-            else{
+        if (mysqli_num_rows($query_verificar) == 0) {
+            $cadastrar = "INSERT INTO Usuario(email, senha) VALUES('$email','$senha')";
+            
+            if (mysqli_query($ocon, $cadastrar)) {
+                $resposta["status"] = "sucesso";
+                $resposta["mensagem"] = "Cadastro bem sucedido";
+            } else {
                 $resposta["status"] = "erro";
-                $resposta["mensagem"] = "Email já cadastrado";
-                echo json_encode($resposta);
+                $resposta["mensagem"] = "Erro ao inserir dados";
             }
-        }
-        else{
+        } else {
             $resposta["status"] = "erro";
-            $resposta["mensagem"] = "Email inválido";
-            echo json_encode($resposta);
+            $resposta["mensagem"] = "Email já cadastrado";
         }
-    }
-        else {
+    } else {
         $resposta["status"] = "erro";
-        $resposta["mensagem"] = "Falha na variavel de conexao";
+        $resposta["mensagem"] = "Email inválido";
     }
+} else {
+    $resposta["status"] = "erro";
+    $resposta["mensagem"] = "Falha na variável de conexão";
+}
+
+echo json_encode($resposta);
 ?>
