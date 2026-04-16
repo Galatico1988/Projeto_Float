@@ -1,16 +1,20 @@
 <?php
-// VALORES REAIS DO SEU BANCO NO RAILWAY
-$host = 'mysql.railway.internal';
-$user = 'root';
-$pass = 'uYbOgZGxOSIZVefbqwOsXZIKDasRtjrd';
-$db   = 'railway';
-$port = '3306';
+// Pega os valores reais que estão guardados no painel do Railway
+$host = getenv('MYSQLHOST');
+$user = getenv('MYSQLUSER');
+$pass = getenv('MYSQLPASSWORD');
+$db   = getenv('MYSQLDATABASE'); // Verifique se no Railway está sem o underline (_)
+$port = getenv('MYSQLPORT');
 
-// Tenta a conexão direta
+// FAZ A CONEXÃO USANDO AS VARIÁVEIS (SEM ASPAS NOS NOMES)
 $ocon = mysqli_connect($host, $user, $pass, $db, $port);
 
 if (!$ocon) {
     header('Content-Type: application/json');
-    die(json_encode(["status" => "erro", "mensagem" => mysqli_connect_error()]));
+    echo json_encode([
+        "status" => "erro",
+        "mensagem" => "Falha na conexão: " . mysqli_connect_error()
+    ]);
+    exit;
 }
 ?>
