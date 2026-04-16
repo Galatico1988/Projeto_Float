@@ -5,3 +5,4 @@ echo json_encode([
     "projeto" => "Float",
     "status" => "online"
 ]);
+?>
