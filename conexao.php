@@ -1,7 +1,7 @@
 <?php
 $ocon = mysqli_connect('sql100.infinityfree.com', 'if0_41354013', 'WaBtW3zGedx', 'if0_41354013_usuario');
 
-$respota = array();
+$resposta = array();
 
 if(!$ocon){
     $resposta["status"] = "erro";
