@@ -2,8 +2,8 @@
 header('Content-Type: application/json');
 include 'conexao.php';
 
-$email = $_POST['email'] ?? '';
-$senha = $_POST['senha'] ?? '';
+$email = trim($_POST['email']);
+$senha = $_POST['senha'];
 
 $resposta = array();
 
