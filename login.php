@@ -2,8 +2,11 @@
     include 'conexao.php';
 
     header('Content-Type: application/json');
+
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+
+    $resposta = array();
 
     $verificar = "SELECT * FROM Usuario WHERE email = '$email' AND senha = '$senha'";
 
